@@ -47,14 +47,13 @@ const onSearchFormSubmit = event => {
     })
     .catch(err => {
       loader.style.display = 'none';
-      console.log(err);
+      iziToast.error({
+  message: `Something went wrong: ${err.message}`,
+  position: 'topRight',
+});
     });
   searchFormEl.reset();
 };
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
 
-fetch(url, {
-  method: 'GET',
-  credentials: 'omit',
-});
