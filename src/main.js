@@ -12,14 +12,19 @@ const onSearchFormSubmit = event => {
   event.preventDefault();
 
   const searchedQuery = event.currentTarget.elements.user_query.value.trim();
+  
+  
   if (searchedQuery === '') {
     iziToast.error({
       message: 'Please enter your request',
       position: 'topRight',
     });
+    galleryEl.innerHTML = ''; 
     return;
   }
-  loader.classList.remove('is-hidden');
+
+  loader.classList.remove('is-hidden'); 
+
   fetchPhotosByQuery(searchedQuery)
     .then(data => {
       if (data.total === 0) {
@@ -28,8 +33,8 @@ const onSearchFormSubmit = event => {
             '"Sorry, there are no images matching your search query. Please try again!"',
           position: 'topRight',
         });
-
-        galleryEl.innerHTML = '';
+        galleryEl.innerHTML = ''; 
+        loader.classList.add('is-hidden'); 
         searchFormEl.reset();
         return;
       }
@@ -38,7 +43,7 @@ const onSearchFormSubmit = event => {
         .map(el => createGalleryCardTemplate(el))
         .join('');
       galleryEl.innerHTML = galleryTemplate;
-      loader.classList.add('is-hidden');
+      loader.classList.add('is-hidden'); 
       const gallery = new SimpleLightbox('.js-gallery a', {
         captionDelay: 300,
         captionsData: 'alt',
@@ -46,14 +51,11 @@ const onSearchFormSubmit = event => {
       gallery.refresh();
     })
     .catch(err => {
-      loader.style.display = 'none';
-      iziToast.error({
-  message: `Something went wrong: ${err.message}`,
-  position: 'topRight',
-});
+      loader.classList.add('is-hidden'); 
+      console.log(err);
     });
-  searchFormEl.reset();
+
+  searchFormEl.reset(); 
 };
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
-
